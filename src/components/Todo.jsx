@@ -1,34 +1,38 @@
-import React, { useEffect, useRef, useState} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaCheckCircle, FaTimesCircle, FaEdit } from "react-icons/fa";
+import { AuthContext } from "../context/AuthContext";
 
 function Todo({ todos, todo, setTodos }) {
 	const [edit, setEdit] = useState(false);
 	const [editValue, setEditValue] = useState(todo.text);
 	const editRef = useRef(null);
 
+	const { userId } = useContext(AuthContext);
+
 	useEffect(() => {
-        edit && editRef.current.focus();
-    }, [edit]);
+		edit && editRef.current.focus();
+	}, [edit]);
 
 	const deleteTodo = () => {
-		setTodos(todos.filter((el) => el.id !== todo.id));
+		const updatedTodos = todos.filter((el) => el.id !== todo.id);
+		setTodos(updatedTodos);
+		localStorage.setItem(`todos-${userId}`, JSON.stringify(updatedTodos));
 	};
 
 	const completeTodo = () => {
-		setTodos(
-			todos.map((el) => {
-				if (el.id === todo.id) {
-					return {
-						...el,
-						completed: !todo.completed,
-					};
-				}
-				return el;
-			})
-		);
+		const updatedTodos = todos.map((el) => {
+			if (el.id === todo.id) {
+				return {
+					...el,
+					completed: !todo.completed,
+				};
+			}
+			return el;
+		});
+		setTodos(updatedTodos);
+		localStorage.setItem(`todos-${userId}`, JSON.stringify(updatedTodos));
 	};
 
-	
 	const editTodo = () => {
 		setEdit(!edit);
 	};
@@ -38,11 +42,11 @@ function Todo({ todos, todo, setTodos }) {
 	};
 
 	const handleSubmit = (id) => {
-		setTodos(
-			todos.map((todo) =>
-				todo.id === id ? { ...todo, text: editValue } : todo
-			)
+		const updatedTodos = todos.map((todo) =>
+			todo.id === id ? { ...todo, text: editValue } : todo
 		);
+		setTodos(updatedTodos);
+		localStorage.setItem(`todos-${userId}`, JSON.stringify(updatedTodos));
 		setEdit(false);
 	};
 
@@ -53,9 +57,11 @@ function Todo({ todos, todo, setTodos }) {
 	};
 
 	return (
-		<form onSubmit={(e) => e.preventDefault()} className={todo.completed ? "todo-item completed" : "todo-item"}>
+		<form
+			onSubmit={(e) => e.preventDefault()}
+			className={todo.completed ? "todo-item completed" : "todo-item"}>
 			{edit && !todo.completed ? (
-				<div className="edit-todo-group">
+				<div className='edit-todo-group'>
 					<input
 						type='text'
 						onChange={handleEdit}
@@ -73,7 +79,7 @@ function Todo({ todos, todo, setTodos }) {
 			) : (
 				<>
 					<p>{todo.text}</p>
-					<div className="icon-group">
+					<div className='icon-group'>
 						<button onClick={completeTodo} type='submit'>
 							<span className='icon'>
 								<FaCheckCircle />
