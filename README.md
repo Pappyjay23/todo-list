@@ -3,8 +3,8 @@
 </div>
 
 ## Snapshots 📸
+![Snapshot of Todo App](https://github.com/Pappyjay23/todo-list/assets/60526129/45864547-9f01-4c53-98d1-67856578588a)
 
-![Snapshot of Todo App](https://github.com/Pappyjay23/todo-list/assets/60526129/80be4219-b088-4fbd-99b5-fe92fa432866)
 
 
 ## Tech Stack ✨
