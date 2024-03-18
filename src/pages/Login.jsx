@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { IoEyeOff, IoEye } from "react-icons/io5";
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -10,9 +11,11 @@ const Login = () => {
 		password: "",
 	});
 
+	const [showPassword, setShowPassword] = useState(false);
+
 	const [formError, setFormError] = useState("");
 
-	const { login, user } = useContext(AuthContext);
+	const { login } = useContext(AuthContext);
 
 	const [errors, setErrors] = useState({});
 
@@ -36,22 +39,25 @@ const Login = () => {
 		const validationErrors = validateForm(formData);
 		setErrors(validationErrors);
 
+		const users = Object.values(localStorage).map(JSON.parse);
+		const user = users.find(
+			(user) => user.email === email && user.password === password
+		);
+
 		if (Object.keys(validationErrors).length === 0) {
 			login(email, password);
 
 			if (user) {
 				navigate("/home");
+				setFormData({ ...formData, email: "", password: "" });
 			} else {
-				setFormError(
-					"Email and password do not match any user on database. Redirecting you to sign up..."
-				);
+				setFormError("We couldn't find an account matching that email and password. No worries, try again!");
 
 				setTimeout(() => {
-					navigate("/sign-up");
-				}, 4000);
+					setFormData({ ...formData, email: "", password: "" });
+					setFormError("");
+				}, 2500);
 			}
-
-			setFormData({ ...formData, email: "", password: "" });
 		}
 	};
 
@@ -70,14 +76,21 @@ const Login = () => {
 						placeholder='Email'
 					/>
 					{errors.email && <p className='error-message'>{errors.email}</p>}
-					<input
-						type='password'
-						value={password}
-						onChange={(e) =>
-							setFormData({ ...formData, password: e.target.value })
-						}
-						placeholder='Password'
-					/>
+					<div className='password-group'>
+						<input
+							type={showPassword ? "text" : "password"}
+							value={password}
+							onChange={(e) =>
+								setFormData({ ...formData, password: e.target.value })
+							}
+							placeholder='Password'
+						/>
+						<span
+							className='toggle-password-icon'
+							onClick={() => setShowPassword((prev) => !prev)}>
+							{showPassword ? <IoEyeOff /> : <IoEye />}
+						</span>
+					</div>
 					{errors.password && (
 						<p className='error-message'>{errors.password}</p>
 					)}

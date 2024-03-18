@@ -107,9 +107,31 @@ body {
 			color: rgb(105, 107, 250);
 		}
 	}
+
 	.error-message {
 		color: red;
 		text-align: left;
+	}
+
+	.password-group {
+		width: 100%;
+		position: relative;
+		background-color: white;
+		border-radius: 4px;
+
+		input {
+			width: 90%;
+			z-index: 2;
+		}
+
+		.toggle-password-icon {
+			position: absolute;
+			right: 10px;
+			top: 25%;
+			cursor: pointer;
+			z-index: 5;
+			color: black;
+		}
 	}
 }
 

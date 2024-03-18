@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 
 const SignUp = () => {
 	const navigate = useNavigate();
@@ -9,6 +10,8 @@ const SignUp = () => {
 		email: "",
 		password: "",
 	});
+
+	const [showPassword, setShowPassword] = useState(false);
 
 	const { signUp } = useContext(AuthContext);
 
@@ -57,14 +60,21 @@ const SignUp = () => {
 						placeholder='Email'
 					/>
 					{errors.email && <p className='error-message'>{errors.email}</p>}
-					<input
-						type='password'
-						value={password}
-						onChange={(e) =>
-							setFormData({ ...formData, password: e.target.value })
-						}
-						placeholder='Create Password'
-					/>
+					<div className='password-group'>
+						<input
+							type={showPassword ? "text" : "password"}
+							value={password}
+							onChange={(e) =>
+								setFormData({ ...formData, password: e.target.value })
+							}
+							placeholder='Create Password'
+						/>
+						<span
+							className='toggle-password-icon'
+							onClick={() => setShowPassword((prev) => !prev)}>
+							{showPassword ? <IoEyeOff /> : <IoEye />}
+						</span>
+					</div>
 					{errors.password && (
 						<p className='error-message'>{errors.password}</p>
 					)}

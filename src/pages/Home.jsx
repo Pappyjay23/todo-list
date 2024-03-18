@@ -8,13 +8,11 @@ const Home = () => {
 	const [input, setInput] = useState("");
 	const [todos, setTodos] = useState([]);
 
-	const { setUser } = useContext(AuthContext);
 
 	const navigate = useNavigate();
 
 	const logOut = () => {
 		navigate("/");
-		setUser(null);
 	};
 
 	const { userId } = useContext(AuthContext);
