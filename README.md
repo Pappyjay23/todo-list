@@ -1,5 +1,5 @@
 <div align="center">
-	<h1> Todo App - Your Daily Planner</h1>
+	<h1> Todo App </h1>
 </div>
 
 ## Snapshots 📸
