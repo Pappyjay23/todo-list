@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
-import './App.css';
-import Form from './components/Form';
-import TodoList from './components/TodoList';
+import Form from '../components/Form'
+import TodoList from '../components/TodoList'
 
-function App() {
-
-  const [input, setInput] = useState("")
-  const [todos,setTodos] = useState([])
-
+const Home = () => {
+  const [input, setInput] = useState('')
+  const [todos, setTodos] = useState([])
   return (
     <div className="todo-app">
         <div className="todo-container">
@@ -16,7 +13,7 @@ function App() {
             <TodoList todos={todos} setTodos ={setTodos}/>
         </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default Home
