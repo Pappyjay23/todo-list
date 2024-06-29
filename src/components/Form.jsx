@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { MdOutlinePostAdd } from "react-icons/md";
 
 function Form({ input, setInput, todos, setTodos }) {
 	const getInputData = (e) => {
@@ -40,8 +41,8 @@ function Form({ input, setInput, todos, setTodos }) {
 					placeholder='Add a todo'
 					value={input}
 				/>
-				<button onClick={addTodos} type='submit'>
-					Add todo
+				<button onClick={addTodos} type='submit' className='add-todo-btn'>
+					<MdOutlinePostAdd className='add-todo-btn-icon' />
 				</button>
 			</form>
 		</div>

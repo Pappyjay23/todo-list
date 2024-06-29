@@ -6,21 +6,43 @@
 		"Lucida Sans", Arial, sans-serif;
 }
 
+html,
 body {
-	background: url(images/bg.jpg);
-	background-position: center;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+body {
+	background: url(images/bg.jpg) no-repeat center center fixed;
 	background-size: cover;
-	backdrop-filter: blur(8px);
+	margin: 0;
+	padding: 0;
 	height: 100vh;
 }
 
+.blur-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	backdrop-filter: blur(8px);
+	z-index: 1;
+}
+
 .todo-app {
+	position: relative;
 	display: flex;
 	justify-content: center;
-	align-items: flex-start;
+	align-items: center;
 	color: #fff;
-	height: 100%;
+	min-height: 100vh;
+	width: 100%;
 	padding: 0 0.7rem;
+	box-sizing: border-box;
+	z-index: 2;
 }
 
 .todo-container {
@@ -31,6 +53,37 @@ body {
 	border-radius: 10px;
 	border: 1px solid #fff;
 	padding: 1.5rem;
+
+	.log-out-container {
+		width: 100%;
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: 1rem;
+
+		.logOutBtn {
+			padding: 10px;
+			background: linear-gradient(
+				90deg,
+				rgba(93, 12, 255, 1) 0%,
+				rgba(155, 0, 250, 1) 100%
+			);
+			color: white;
+			border-radius: 6px;
+			outline: none;
+			border: 0;
+			cursor: pointer;
+
+			@media screen and (max-width: 430px) {
+				font-size: 80%;
+			}
+			@media screen and (max-width: 375px) {
+				font-size: 70%;
+			}
+			@media screen and (min-width: 430px) {
+				display: none;
+			}
+		}
+	}
 
 	.title-error-message {
 		color: red;
@@ -45,8 +98,17 @@ body {
 		justify-content: space-between;
 		margin-bottom: 2rem;
 
+		@media screen and (max-width: 430px) {
+			justify-content: center;
+			margin-bottom: 1rem;
+		}
+
 		h1 {
 			font-size: 150%;
+
+			@media screen and (max-width: 430px) {
+				font-size: 130%;
+			}
 		}
 
 		button {
@@ -61,6 +123,14 @@ body {
 			outline: none;
 			border: 0;
 			cursor: pointer;
+
+			@media screen and (max-width: 430px) {
+				font-size: 80%;
+				display: none;
+			}
+			@media screen and (max-width: 375px) {
+				font-size: 70%;
+			}
 		}
 	}
 }
@@ -147,7 +217,15 @@ body {
 	);
 	padding: 2px;
 	border-radius: 3px;
-	margin-bottom: 2rem;
+	margin-bottom: 1rem;
+
+	.add-todo-btn-icon {
+		font-size: 1.5rem;
+
+		@media screen and (min-width: 768px) {
+			font-size: 1.8rem;
+		}
+	}
 }
 
 .todo-cover {
@@ -160,12 +238,16 @@ body {
 }
 
 .todo-form input {
-	width: 80%;
+	width: 85%;
 	padding: 1rem;
 	outline: none;
 	border: none;
 	background-color: #000;
 	color: #fff;
+
+	@media screen and (max-width: 380px) {
+		width: 80%;
+	}
 }
 
 .todo-form input::placeholder {
@@ -173,13 +255,17 @@ body {
 }
 
 .todo-form button {
-	width: 20%;
+	width: 15%;
 	outline: none;
 	border: none;
 	background-color: transparent;
 	color: #fff;
 	cursor: pointer;
 	padding: 5px;
+
+	@media screen and (max-width: 380px) {
+		width: 20%;
+	}
 }
 
 .todo-item {
@@ -309,7 +395,6 @@ body {
 	.todo-container h1 {
 		font-size: 130%;
 		text-align: center;
-		margin-bottom: 2rem;
 	}
 }
 

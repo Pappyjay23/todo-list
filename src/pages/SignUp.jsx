@@ -47,47 +47,50 @@ const SignUp = () => {
 	};
 
 	return (
-		<div className='todo-app'>
-			<div className='todo-container'>
-				<h1 className='title'>Sign Up</h1>
-				<form onSubmit={handleSignUp} className='sign-up-form'>
-					<input
-						type='email'
-						value={email}
-						onChange={(e) =>
-							setFormData({ ...formData, email: e.target.value })
-						}
-						placeholder='Email'
-					/>
-					{errors.email && <p className='error-message'>{errors.email}</p>}
-					<div className='password-group'>
+		<>
+			<div className='blur-overlay'></div>
+			<div className='todo-app'>
+				<div className='todo-container'>
+					<h1 className='title'>Sign Up</h1>
+					<form onSubmit={handleSignUp} className='sign-up-form'>
 						<input
-							type={showPassword ? "text" : "password"}
-							value={password}
+							type='email'
+							value={email}
 							onChange={(e) =>
-								setFormData({ ...formData, password: e.target.value })
+								setFormData({ ...formData, email: e.target.value })
 							}
-							placeholder='Create Password'
+							placeholder='Email'
 						/>
-						<span
-							className='toggle-password-icon'
-							onClick={() => setShowPassword((prev) => !prev)}>
-							{showPassword ? <IoEyeOff /> : <IoEye />}
-						</span>
-					</div>
-					{errors.password && (
-						<p className='error-message'>{errors.password}</p>
-					)}
-					<button type='submit'>Sign up</button>
-					<p>
-						Already have an account?{" "}
-						<Link to='/'>
-							<span>Login</span>
-						</Link>
-					</p>
-				</form>
+						{errors.email && <p className='error-message'>{errors.email}</p>}
+						<div className='password-group'>
+							<input
+								type={showPassword ? "text" : "password"}
+								value={password}
+								onChange={(e) =>
+									setFormData({ ...formData, password: e.target.value })
+								}
+								placeholder='Create Password'
+							/>
+							<span
+								className='toggle-password-icon'
+								onClick={() => setShowPassword((prev) => !prev)}>
+								{showPassword ? <IoEyeOff /> : <IoEye />}
+							</span>
+						</div>
+						{errors.password && (
+							<p className='error-message'>{errors.password}</p>
+						)}
+						<button type='submit'>Sign up</button>
+						<p>
+							Already have an account?{" "}
+							<Link to='/'>
+								<span>Login</span>
+							</Link>
+						</p>
+					</form>
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

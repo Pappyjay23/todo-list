@@ -51,7 +51,9 @@ const Login = () => {
 				navigate("/home");
 				setFormData({ ...formData, email: "", password: "" });
 			} else {
-				setFormError("We couldn't find an account matching that email and password. No worries, try again!");
+				setFormError(
+					"We couldn't find an account matching that email and password. No worries, try again!"
+				);
 
 				setTimeout(() => {
 					setFormData({ ...formData, email: "", password: "" });
@@ -62,48 +64,51 @@ const Login = () => {
 	};
 
 	return (
-		<div className='todo-app'>
-			<div className='todo-container'>
-				<h1 className='title'>Login</h1>
-				<p className='title-error-message'>{formError}</p>
-				<form onSubmit={handleLogin} className='login-form'>
-					<input
-						type='email'
-						value={email}
-						onChange={(e) =>
-							setFormData({ ...formData, email: e.target.value })
-						}
-						placeholder='Email'
-					/>
-					{errors.email && <p className='error-message'>{errors.email}</p>}
-					<div className='password-group'>
+		<>
+			<div className='blur-overlay'></div>
+			<div className='todo-app'>
+				<div className='todo-container'>
+					<h1 className='title'>Login</h1>
+					<p className='title-error-message'>{formError}</p>
+					<form onSubmit={handleLogin} className='login-form'>
 						<input
-							type={showPassword ? "text" : "password"}
-							value={password}
+							type='email'
+							value={email}
 							onChange={(e) =>
-								setFormData({ ...formData, password: e.target.value })
+								setFormData({ ...formData, email: e.target.value })
 							}
-							placeholder='Password'
+							placeholder='Email'
 						/>
-						<span
-							className='toggle-password-icon'
-							onClick={() => setShowPassword((prev) => !prev)}>
-							{showPassword ? <IoEyeOff /> : <IoEye />}
-						</span>
-					</div>
-					{errors.password && (
-						<p className='error-message'>{errors.password}</p>
-					)}
-					<button type='submit'>Login</button>
-					<p>
-						Already have an account?{" "}
-						<Link to='/sign-up'>
-							<span>Sign up</span>
-						</Link>
-					</p>
-				</form>
+						{errors.email && <p className='error-message'>{errors.email}</p>}
+						<div className='password-group'>
+							<input
+								type={showPassword ? "text" : "password"}
+								value={password}
+								onChange={(e) =>
+									setFormData({ ...formData, password: e.target.value })
+								}
+								placeholder='Password'
+							/>
+							<span
+								className='toggle-password-icon'
+								onClick={() => setShowPassword((prev) => !prev)}>
+								{showPassword ? <IoEyeOff /> : <IoEye />}
+							</span>
+						</div>
+						{errors.password && (
+							<p className='error-message'>{errors.password}</p>
+						)}
+						<button type='submit'>Login</button>
+						<p>
+							Already have an account?{" "}
+							<Link to='/sign-up'>
+								<span>Sign up</span>
+							</Link>
+						</p>
+					</form>
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

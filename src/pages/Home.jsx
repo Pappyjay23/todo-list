@@ -8,7 +8,6 @@ const Home = () => {
 	const [input, setInput] = useState("");
 	const [todos, setTodos] = useState([]);
 
-
 	const navigate = useNavigate();
 
 	const logOut = () => {
@@ -25,21 +24,29 @@ const Home = () => {
 	}, [userId]);
 
 	return (
-		<div className='todo-app'>
-			<div className='todo-container'>
-				<div className='home-top-desc'>
-					<h1>What's the Plan Today</h1>
-					<button onClick={logOut}>Log out</button>
+		<>
+			<div className='blur-overlay'></div>
+			<div className='todo-app'>
+				<div className='todo-container'>
+					<div className='log-out-container'>
+						<button onClick={logOut} className='logOutBtn'>
+							Log out
+						</button>
+					</div>
+					<div className='home-top-desc'>
+						<h1>What's the Plan Today</h1>
+						<button onClick={logOut}>Log out</button>
+					</div>
+					<Form
+						input={input}
+						setInput={setInput}
+						todos={todos}
+						setTodos={setTodos}
+					/>
+					<TodoList todos={todos} setTodos={setTodos} />
 				</div>
-				<Form
-					input={input}
-					setInput={setInput}
-					todos={todos}
-					setTodos={setTodos}
-				/>
-				<TodoList todos={todos} setTodos={setTodos} />
 			</div>
-		</div>
+		</>
 	);
 };
 
