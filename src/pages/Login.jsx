@@ -43,7 +43,7 @@ const Login = () => {
 			setFormError("");
 			try {
 				await login(email, password);
-				navigate("/home");
+				navigate("/");
 				setFormData({ ...formData, email: "", password: "" });
 			} catch (error) {
 				console.error("Login error:", error);

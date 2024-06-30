@@ -40,7 +40,7 @@ const SignUp = () => {
 		if (Object.keys(validationErrors).length === 0) {
 			await signUp(email, password);
 
-			navigate("/home");
+			navigate("/");
 
 			setFormData({ ...formData, email: "", password: "" });
 		}
