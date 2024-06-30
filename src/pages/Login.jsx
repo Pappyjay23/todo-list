@@ -15,7 +15,7 @@ const Login = () => {
 
 	const [formError, setFormError] = useState("");
 
-	const { login } = useContext(AuthContext);
+	const { login, user } = useContext(AuthContext);
 
 	const [errors, setErrors] = useState({});
 
@@ -39,27 +39,21 @@ const Login = () => {
 		const validationErrors = validateForm(formData);
 		setErrors(validationErrors);
 
-		const users = Object.values(localStorage).map(JSON.parse);
-		const user = users.find(
-			(user) => user.email === email && user.password === password
-		);
-
 		if (Object.keys(validationErrors).length === 0) {
-			await login(email, password);
-
-			if (user) {
+			setFormError("");
+			try {
+				await login(email, password);
 				navigate("/home");
 				setFormData({ ...formData, email: "", password: "" });
-			} else {
-				setFormError(
-					"We couldn't find an account matching that email and password. No worries, try again!"
-				);
-
-				setTimeout(() => {
-					setFormData({ ...formData, email: "", password: "" });
-					setFormError("");
-				}, 2500);
+			} catch (error) {
+				console.error("Login error:", error);
+				setFormError(error.message || "Failed to log in. Please try again.");
 			}
+
+			setTimeout(() => {
+				setFormData({ ...formData, email: "", password: "" });
+				setFormError("");
+			}, 2500);
 		}
 	};
 
