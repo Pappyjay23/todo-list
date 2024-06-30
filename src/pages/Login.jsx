@@ -15,7 +15,7 @@ const Login = () => {
 
 	const [formError, setFormError] = useState("");
 
-	const { login, user } = useContext(AuthContext);
+	const { login } = useContext(AuthContext);
 
 	const [errors, setErrors] = useState({});
 
