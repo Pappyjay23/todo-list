@@ -1,43 +1,34 @@
-// AuthContext.js
-import React, { createContext, useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { createContext, useState, useEffect } from 'react';
+import { auth } from '../firebase';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-	const [userId, setUserId] = useState(null);
+  const [user, setUser] = useState(null);
 
-	useEffect(() => {
-		const storedUserId = localStorage.getItem("userId");
-		if (storedUserId) {
-			setUserId(storedUserId);
-		}
-	}, []);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
-	const signUp = (email, password) => {
-		const newUserId = uuidv4();
-		const user = { email, password, userId: newUserId };
-		localStorage.setItem(`user-${newUserId}`, JSON.stringify(user));
-		setUserId(newUserId);
-	};
+  const signUp = (email, password) => {
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
 
-	const login = (email, password) => {
-		const users = Object.values(localStorage).map(JSON.parse);
-		const user = users.find(
-			(user) => user.email === email && user.password === password
-		);
-		user && setUserId(user.userId);
-	};
+  const login = (email, password) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
 
-	const logout = () => {
-		localStorage.removeItem(`user-${userId}`);
-		localStorage.removeItem(`todos-${userId}`);
-		setUserId(null);
-	};
+  const logout = () => {
+    return signOut(auth);
+  };
 
-	return (
-		<AuthContext.Provider value={{ userId, signUp, login, logout }}>
-			{children}
-		</AuthContext.Provider>
-	);
+  return (
+    <AuthContext.Provider value={{ user, signUp, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

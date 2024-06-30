@@ -1,29 +1,31 @@
 import React, { useRef, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { MdOutlinePostAdd } from "react-icons/md";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../firebase";
 
 function Form({ input, setInput, todos, setTodos }) {
 	const getInputData = (e) => {
 		setInput(e.target.value);
 	};
-	const { userId } = useContext(AuthContext);
+	const { user } = useContext(AuthContext);
 
-	const addTodos = (e) => {
+	const addTodos = async (e) => {
 		e.preventDefault();
-		if (!input) {
+		if (!input || !user) {
 			return;
 		}
 
-		const newTodos = [
-			...todos,
-			{ text: input, completed: false, id: Math.random() * 1000 },
-		];
-
-		setTodos(newTodos);
-
-		localStorage.setItem(`todos-${userId}`, JSON.stringify(newTodos));
-
-		setInput("");
+		try {
+			await addDoc(collection(db, `users/${user.email}/todoList`), {
+				text: input,
+				completed: false,
+				createdAt: new Date(),
+			});
+			setInput("");
+		} catch (error) {
+			console.error("Error adding todo:", error);
+		}
 	};
 
 	const inputRef = useRef(null);

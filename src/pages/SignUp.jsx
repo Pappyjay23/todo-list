@@ -31,14 +31,14 @@ const SignUp = () => {
 	};
 
 	const { email, password } = formData;
-	const handleSignUp = (e) => {
+	const handleSignUp = async (e) => {
 		e.preventDefault();
 
 		const validationErrors = validateForm(formData);
 		setErrors(validationErrors);
 
 		if (Object.keys(validationErrors).length === 0) {
-			signUp(email, password);
+			await signUp(email, password);
 
 			navigate("/home");
 

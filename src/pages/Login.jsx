@@ -33,7 +33,7 @@ const Login = () => {
 	};
 
 	const { email, password } = formData;
-	const handleLogin = (e) => {
+	const handleLogin = async (e) => {
 		e.preventDefault();
 
 		const validationErrors = validateForm(formData);
@@ -45,7 +45,7 @@ const Login = () => {
 		);
 
 		if (Object.keys(validationErrors).length === 0) {
-			login(email, password);
+			await login(email, password);
 
 			if (user) {
 				navigate("/home");

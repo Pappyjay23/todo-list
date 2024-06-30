@@ -3,6 +3,8 @@ import Form from "../components/Form";
 import TodoList from "../components/TodoList";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db } from "../firebase";
 
 const Home = () => {
 	const [input, setInput] = useState("");
@@ -10,18 +12,35 @@ const Home = () => {
 
 	const navigate = useNavigate();
 
-	const logOut = () => {
-		navigate("/");
-	};
-
-	const { userId } = useContext(AuthContext);
+	const { user, logout } = useContext(AuthContext);
 
 	useEffect(() => {
-		const storedTodos = JSON.parse(
-			localStorage.getItem(`todos-${userId}`) || "[]"
-		);
-		setTodos(storedTodos);
-	}, [userId]);
+		if (user) {
+			const q = query(
+				collection(db, `users/${user.email}/todoList`),
+				orderBy("createdAt", "desc")
+			);
+
+			const unsubscribe = onSnapshot(q, (querySnapshot) => {
+				const todosArray = querySnapshot.docs.map((doc) => ({
+					id: doc.id,
+					...doc.data(),
+				}));
+				setTodos(todosArray);
+			});
+
+			return () => unsubscribe();
+		}
+	}, [user]);
+
+	const handleLogout = async () => {
+		try {
+			await logout();
+			navigate("/");
+		} catch (error) {
+			console.error("Logout error:", error);
+		}
+	};
 
 	return (
 		<>
@@ -29,13 +48,13 @@ const Home = () => {
 			<div className='todo-app'>
 				<div className='todo-container'>
 					<div className='log-out-container'>
-						<button onClick={logOut} className='logOutBtn'>
+						<button onClick={handleLogout} className='logOutBtn'>
 							Log out
 						</button>
 					</div>
 					<div className='home-top-desc'>
 						<h1>What's the Plan Today</h1>
-						<button onClick={logOut}>Log out</button>
+						<button onClick={handleLogout}>Log out</button>
 					</div>
 					<Form
 						input={input}
@@ -43,7 +62,7 @@ const Home = () => {
 						todos={todos}
 						setTodos={setTodos}
 					/>
-					<TodoList todos={todos} setTodos={setTodos} />
+					<TodoList todos={todos} />
 				</div>
 			</div>
 		</>

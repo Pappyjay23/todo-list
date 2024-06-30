@@ -1,36 +1,38 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaCheckCircle, FaTimesCircle, FaEdit } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
-function Todo({ todos, todo, setTodos }) {
+function Todo({ todo }) {
 	const [edit, setEdit] = useState(false);
 	const [editValue, setEditValue] = useState(todo.text);
 	const editRef = useRef(null);
 
-	const { userId } = useContext(AuthContext);
+	const { user } = useContext(AuthContext);
 
 	useEffect(() => {
 		edit && editRef.current.focus();
 	}, [edit]);
 
-	const deleteTodo = () => {
-		const updatedTodos = todos.filter((el) => el.id !== todo.id);
-		setTodos(updatedTodos);
-		localStorage.setItem(`todos-${userId}`, JSON.stringify(updatedTodos));
+	const deleteTodo = async () => {
+		if (!user) return;
+		try {
+			await deleteDoc(doc(db, `users/${user.email}/todoList`, todo.id));
+		} catch (error) {
+			console.error("Error deleting todo:", error);
+		}
 	};
 
-	const completeTodo = () => {
-		const updatedTodos = todos.map((el) => {
-			if (el.id === todo.id) {
-				return {
-					...el,
-					completed: !todo.completed,
-				};
-			}
-			return el;
-		});
-		setTodos(updatedTodos);
-		localStorage.setItem(`todos-${userId}`, JSON.stringify(updatedTodos));
+	const completeTodo = async () => {
+		if (!user) return;
+		try {
+			await updateDoc(doc(db, `users/${user.email}/todoList`, todo.id), {
+				completed: !todo.completed,
+			});
+		} catch (error) {
+			console.error("Error updating todo:", error);
+		}
 	};
 
 	const editTodo = () => {
@@ -41,13 +43,16 @@ function Todo({ todos, todo, setTodos }) {
 		setEditValue(e.target.value);
 	};
 
-	const handleSubmit = (id) => {
-		const updatedTodos = todos.map((todo) =>
-			todo.id === id ? { ...todo, text: editValue } : todo
-		);
-		setTodos(updatedTodos);
-		localStorage.setItem(`todos-${userId}`, JSON.stringify(updatedTodos));
-		setEdit(false);
+	const handleSubmit = async (id) => {
+		if (!user) return;
+		try {
+			await updateDoc(doc(db, `users/${user.email}/todoList`, id), {
+				text: editValue,
+			});
+			setEdit(false);
+		} catch (error) {
+			console.error("Error updating todo:", error);
+		}
 	};
 
 	const handleKeyPress = (e, id) => {
